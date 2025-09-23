@@ -1,0 +1,776 @@
+{
+  "results": [
+    {
+      "file": "Buzzi CV - ptbr.pdf",
+      "hash": "72e033721329de0deb29f9b3b7218cf1dfafd5ed0511c09f4ba7c5efd18a1423",
+      "data": {
+        "candidate": {
+          "full_name": "Anderson Buzzi",
+          "emails": [
+            "anderson.buzzi@gmail.com"
+          ],
+          "phones": [
+            "+5547991364200"
+          ],
+          "location": {
+            "city": "Blumenau",
+            "state": "Santa Catarina",
+            "country": "Br"
+          },
+          "links": {
+            "linkedin": "https://www.linkedin.com/in/",
+            "github": null,
+            "portfolio": null
+          }
+        },
+        "summary": "Com mais de 20 anos de experiência em Tecnologia, liderei times",
+        "skills": [
+          {
+            "name": "go",
+            "level": "na",
+            "confidence": 0.9
+          },
+          {
+            "name": "r",
+            "level": "na",
+            "confidence": 0.9
+          },
+          {
+            "name": "scrum",
+            "level": "expert",
+            "confidence": 0.9
+          },
+          {
+            "name": "kanban",
+            "level": "na",
+            "confidence": 0.9
+          },
+          {
+            "name": "java",
+            "level": "na",
+            "confidence": 0.7
+          },
+          {
+            "name": "scala",
+            "level": "na",
+            "confidence": 0.7
+          },
+          {
+            "name": "react",
+            "level": "na",
+            "confidence": 0.7
+          },
+          {
+            "name": "spring",
+            "level": "na",
+            "confidence": 0.5
+          },
+          {
+            "name": "quarkus",
+            "level": "na",
+            "confidence": 0.5
+          },
+          {
+            "name": "angular",
+            "level": "na",
+            "confidence": 0.5
+          },
+          {
+            "name": "mysql",
+            "level": "na",
+            "confidence": 0.5
+          },
+          {
+            "name": "postgresql",
+            "level": "na",
+            "confidence": 0.5
+          },
+          {
+            "name": "mongodb",
+            "level": "na",
+            "confidence": 0.5
+          },
+          {
+            "name": "redis",
+            "level": "na",
+            "confidence": 0.5
+          },
+          {
+            "name": "kubernetes",
+            "level": "na",
+            "confidence": 0.5
+          }
+        ],
+        "languages": [
+          {
+            "name": "English",
+            "level_cefr": null,
+            "confidence": 0.7
+          }
+        ],
+        "experiences": [
+          {
+            "company": "Empresa não especificada",
+            "role": null,
+            "employment_type": null,
+            "start_date": null,
+            "end_date": null,
+            "is_current": null,
+            "location": null,
+            "achievements": [],
+            "tech_stack": [],
+            "confidence": 0.6
+          },
+          {
+            "company": "Paytrack",
+            "role": "Diretor de Tecnologia (CTO)",
+            "employment_type": null,
+            "start_date": "2020-09",
+            "end_date": "2025-04",
+            "is_current": null,
+            "location": null,
+            "achievements": [],
+            "tech_stack": [
+              "kanban",
+              "scala"
+            ],
+            "confidence": 1.0
+          },
+          {
+            "company": "Freelance/Consultoria",
+            "role": "Diretor de Tecnologia",
+            "employment_type": null,
+            "start_date": "2023-02",
+            "end_date": "2023-11",
+            "is_current": null,
+            "location": null,
+            "achievements": [],
+            "tech_stack": [
+              "java",
+              "mongodb",
+              "quarkus",
+              "redis",
+              "mysql",
+              "react",
+              "postgresql",
+              "spring"
+            ],
+            "confidence": 0.6
+          },
+          {
+            "company": "Senior Sistemas",
+            "role": "Team Leader",
+            "employment_type": null,
+            "start_date": "2020-01",
+            "end_date": "2020-09",
+            "is_current": null,
+            "location": null,
+            "achievements": [],
+            "tech_stack": [
+              "react"
+            ],
+            "confidence": 1.0
+          },
+          {
+            "company": "Senior Sistemas",
+            "role": "Team Leader - Travel",
+            "employment_type": null,
+            "start_date": "2019-04",
+            "end_date": "2019-12",
+            "is_current": null,
+            "location": null,
+            "achievements": [],
+            "tech_stack": [
+              "react"
+            ],
+            "confidence": 1.0
+          },
+          {
+            "company": "Senior Sistemas",
+            "role": "Senior Sistemas",
+            "employment_type": null,
+            "start_date": "2018-01",
+            "end_date": "2019-06",
+            "is_current": null,
+            "location": null,
+            "achievements": [],
+            "tech_stack": [],
+            "confidence": 1.0
+          },
+          {
+            "company": "Blumenau",
+            "role": "Analista de Sistemas",
+            "employment_type": null,
+            "start_date": "2015-10",
+            "end_date": "2017-12",
+            "is_current": null,
+            "location": null,
+            "achievements": [
+              "Coordenador do time de Desenvolvimento do produto HCM (25 pessoas).",
+              "ano depois de voltar, assumi como Coordenador de Desenvolvimento."
+            ],
+            "tech_stack": [
+              "kanban",
+              "scrum"
+            ],
+            "confidence": 1.0
+          },
+          {
+            "company": "PedidosWeb",
+            "role": "Empreendedor",
+            "employment_type": null,
+            "start_date": "2014-10",
+            "end_date": "2015-10",
+            "is_current": null,
+            "location": null,
+            "achievements": [
+              "Conquistei 2 clientes, que utilizaram a plataforma por 9 anos."
+            ],
+            "tech_stack": [
+              "scrum"
+            ],
+            "confidence": 1.0
+          }
+        ],
+        "education": [
+          {
+            "institution": "INPG",
+            "degree": "Bacharel em Ciência da Computação  · (2005 - 2010)",
+            "field": null,
+            "start_date": "2011-01",
+            "end_date": "2013-01",
+            "confidence": 0.7
+          },
+          {
+            "institution": "FURB",
+            "degree": "· (2011 - 2013)",
+            "field": null,
+            "start_date": "2005-01",
+            "end_date": "2010-01",
+            "confidence": 0.7
+          }
+        ],
+        "certifications": [],
+        "expected_salary": null,
+        "availability": null,
+        "meta": {
+          "raw_len": 6410,
+          "projects": [
+            {
+              "name": "HCM (25 pessoas)",
+              "description": "Travel\njaneiro de 2020 - setembro de 2020 (9 meses)\nBlumenau, Santa Catarina, Brasil\nAnalista de sistemas\nabril de 2019 - dezembro de 2019 (9 meses)\nBlumenau\nSenior Sistemas\n3 anos 9 meses\nDevelopment Coordinator\njaneiro de 2018 - junho de 2019 (1 ano 6 meses)\nBlumenau e Região, Brasil\nCoordenador do time de Desenvolvimento do produto HCM (25 pessoas)",
+              "technologies": [
+                "r"
+              ],
+              "url": null,
+              "confidence": 0.7
+            },
+            {
+              "name": "Projeto não especificado",
+              "description": "outubro de 2014 (6 anos 2 meses)\n \nPage 3 of 5\n\n \n \nFui desenvolvedor e analista de sistemas dos módulos de RH",
+              "technologies": [
+                "r"
+              ],
+              "url": null,
+              "confidence": 0.7
+            },
+            {
+              "name": "GOVERNANÇABRASIL - GOVBR",
+              "description": "negocios&noticia=05396-rede-social-ajuda-a-encontrar-emprego-mais-perto-\nde-casa\nGOVERNANÇABRASIL - GOVBR\nDesenvolvedor de Software\nmaio de 2008 - setembro de 2008 (5 meses)\nDesenvolvedor Delphi e Visual Basic\nBenner Sistemas\nDesenvolvedor de software\nfevereiro de 2006 - maio de 2008 (2 anos 4 meses)\nBlumenau, Santa Catarina, Brasil\nDesenvolvedor Delphi e Visual Basic\nCetelbras Educacional\nInstrutor de informática\nabril de 2005 - janeiro de 2006 (10 meses)\nBlumenau, Santa Catarina, Brasil\n \nPage 4 of 5\n\n \n \nFormação acadêmica\nINPG\n · (2011 - 2013)\nFURB\nBacharel em Ciência da Computação  · (2005 - 2010)\n \nPage 5 of 5",
+              "technologies": [
+                "go",
+                "r"
+              ],
+              "url": null,
+              "confidence": 0.7
+            }
+          ],
+          "achievements": [],
+          "parser_version": "enhanced"
+        }
+      },
+      "confidence_overall": 0.98,
+      "processing_ms": 56
+    },
+    {
+      "file": "OrlandoKrause_EN (3).pdf",
+      "hash": "a44b52ef1c1dfe06e545d2ddf3a87175317424ece7c862db2003b07f87251db1",
+      "data": {
+        "candidate": {
+          "full_name": "Orlando Krause",
+          "emails": [
+            "orlando.krausejr@gmail.com"
+          ],
+          "phones": [
+            "+5547999377770"
+          ],
+          "location": {
+            "city": "Blumenau",
+            "state": "Br",
+            "country": "Br"
+          },
+          "links": {
+            "linkedin": "https://www.linkedin.com/in/orlando-krause",
+            "github": "https://github.com/orlandokj",
+            "portfolio": null
+          }
+        },
+        "summary": "the world of software development.",
+        "skills": [
+          {
+            "name": "java",
+            "level": "na",
+            "confidence": 0.9
+          },
+          {
+            "name": "r",
+            "level": "na",
+            "confidence": 0.9
+          },
+          {
+            "name": "angular",
+            "level": "na",
+            "confidence": 0.9
+          },
+          {
+            "name": "go",
+            "level": "beginner",
+            "confidence": 0.7
+          },
+          {
+            "name": "react",
+            "level": "na",
+            "confidence": 0.7
+          },
+          {
+            "name": "mysql",
+            "level": "na",
+            "confidence": 0.7
+          },
+          {
+            "name": "postgresql",
+            "level": "na",
+            "confidence": 0.7
+          },
+          {
+            "name": "git",
+            "level": "na",
+            "confidence": 0.7
+          },
+          {
+            "name": "javascript",
+            "level": "na",
+            "confidence": 0.5
+          },
+          {
+            "name": "aws",
+            "level": "na",
+            "confidence": 0.5
+          },
+          {
+            "name": "docker",
+            "level": "na",
+            "confidence": 0.5
+          }
+        ],
+        "languages": [
+          {
+            "name": "English",
+            "level_cefr": "C2",
+            "confidence": 0.9
+          },
+          {
+            "name": "Portuguese",
+            "level_cefr": "C2",
+            "confidence": 0.9
+          }
+        ],
+        "experiences": [
+          {
+            "company": "Paytrack",
+            "role": null,
+            "employment_type": null,
+            "start_date": null,
+            "end_date": null,
+            "is_current": null,
+            "location": null,
+            "achievements": [],
+            "tech_stack": [
+              "java",
+              "mysql",
+              "angular",
+              "git"
+            ],
+            "confidence": 0.6
+          },
+          {
+            "company": "Paytrack",
+            "role": "Software Architect",
+            "employment_type": null,
+            "start_date": "2020-11",
+            "end_date": null,
+            "is_current": true,
+            "location": null,
+            "achievements": [],
+            "tech_stack": [
+              "java",
+              "mysql",
+              "angular",
+              "git"
+            ],
+            "confidence": 1.0
+          },
+          {
+            "company": "Paytrack",
+            "role": "Software Engineer",
+            "employment_type": null,
+            "start_date": "2019-11",
+            "end_date": "2020-11",
+            "is_current": null,
+            "location": null,
+            "achievements": [],
+            "tech_stack": [
+              "java",
+              "mysql",
+              "angular",
+              "git",
+              "postgresql"
+            ],
+            "confidence": 1.0
+          }
+        ],
+        "education": [
+          {
+            "institution": "Universidade Regional de Blumenau (FURB)",
+            "degree": "Java, HTML, CSS, JavaScript, React",
+            "field": null,
+            "start_date": "2015-01",
+            "end_date": "2019-01",
+            "confidence": 0.7
+          }
+        ],
+        "certifications": [],
+        "expected_salary": null,
+        "availability": null,
+        "meta": {
+          "raw_len": 3234,
+          "projects": [
+            {
+              "name": "was my first professional web application experien",
+              "description": "was my first professional web application experience. Worked a lot with Java an",
+              "technologies": [
+                "java",
+                "r"
+              ],
+              "url": null,
+              "confidence": 0.7
+            },
+            {
+              "name": "SKILLS & PROFICIENCIES",
+              "description": "2019\nEDUCATION\n Java, HTML, CSS, JavaScript, React,\n Docker, SQL, MySQL, PostgreSQL, Git\n Teamwork and attention to detail\n Software and web development\nSKILLS & PROFICIENCIES\nBrazilian Portuguese (Native)\nEnglish (C2 Level CEFR)\nLANGUAGES\n\nPROFESSIONAL EXPERIENCE\nSoftware Engineer\nSenior Sistemas\nMarch 2015 - November 2019\nJoined the internal framework maintenance team, now in an official Software Engineer role",
+              "technologies": [
+                "java",
+                "javascript",
+                "r",
+                "react",
+                "mysql",
+                "postgresql",
+                "docker",
+                "git"
+              ],
+              "url": null,
+              "confidence": 0.7
+            }
+          ],
+          "achievements": [],
+          "parser_version": "enhanced"
+        }
+      },
+      "confidence_overall": 0.98,
+      "processing_ms": 24
+    },
+    {
+      "file": "SENIOR SOFTWARE ENGINEER - MARCO RUTZEN.pdf",
+      "hash": "232c50de89742c48695955c654dadf19f2c3e69d1171856f7e5a517957be34c4",
+      "data": {
+        "candidate": {
+          "full_name": "Marco Aurelio Rutzen",
+          "emails": [
+            "marco.rutzen@gmail.com"
+          ],
+          "phones": [
+            "+5547991664345"
+          ],
+          "location": {
+            "city": "At Dock",
+            "state": "a Brazilian global payment and banking platform",
+            "country": "I led whiteboard sessions to design"
+          },
+          "links": {
+            "linkedin": "https://www.linkedin.com/in/marco-aurelio-rutzen-396154122/",
+            "github": null,
+            "portfolio": null
+          }
+        },
+        "summary": "Experienced Software Engineer with over 11 years of expertise in designing scalable software",
+        "skills": [
+          {
+            "name": "java",
+            "level": "na",
+            "confidence": 0.9
+          },
+          {
+            "name": "javascript",
+            "level": "na",
+            "confidence": 0.9
+          },
+          {
+            "name": "scala",
+            "level": "expert",
+            "confidence": 0.9
+          },
+          {
+            "name": "r",
+            "level": "expert",
+            "confidence": 0.9
+          },
+          {
+            "name": "aws",
+            "level": "na",
+            "confidence": 0.9
+          },
+          {
+            "name": "terraform",
+            "level": "na",
+            "confidence": 0.9
+          },
+          {
+            "name": "ci/cd",
+            "level": "intermediate",
+            "confidence": 0.9
+          },
+          {
+            "name": "typescript",
+            "level": "na",
+            "confidence": 0.7
+          },
+          {
+            "name": "postgresql",
+            "level": "na",
+            "confidence": 0.7
+          },
+          {
+            "name": "spring",
+            "level": "na",
+            "confidence": 0.5
+          },
+          {
+            "name": "quarkus",
+            "level": "na",
+            "confidence": 0.5
+          },
+          {
+            "name": "react",
+            "level": "expert",
+            "confidence": 0.5
+          },
+          {
+            "name": "mysql",
+            "level": "na",
+            "confidence": 0.5
+          },
+          {
+            "name": "redis",
+            "level": "na",
+            "confidence": 0.5
+          },
+          {
+            "name": "oracle",
+            "level": "expert",
+            "confidence": 0.5
+          },
+          {
+            "name": "sql server",
+            "level": "expert",
+            "confidence": 0.5
+          },
+          {
+            "name": "dynamodb",
+            "level": "na",
+            "confidence": 0.5
+          },
+          {
+            "name": "git",
+            "level": "na",
+            "confidence": 0.5
+          },
+          {
+            "name": "lean",
+            "level": "na",
+            "confidence": 0.5
+          },
+          {
+            "name": "pair programming",
+            "level": "na",
+            "confidence": 0.5
+          }
+        ],
+        "languages": [],
+        "experiences": [
+          {
+            "company": "Dock",
+            "role": "Senior Software Engineer",
+            "employment_type": null,
+            "start_date": "2023-03",
+            "end_date": "2024-07",
+            "is_current": null,
+            "location": null,
+            "achievements": [
+              "solutions using Event-Driven Design. I built scalable microservices handling millions of",
+              "transactions daily and developed high-performance APIs and serverless functions to support"
+            ],
+            "tech_stack": [
+              "java",
+              "scala",
+              "dynamodb",
+              "postgresql",
+              "javascript",
+              "aws"
+            ],
+            "confidence": 1.0
+          },
+          {
+            "company": "Paytrack",
+            "role": "Software Architect",
+            "employment_type": null,
+            "start_date": "2022-03",
+            "end_date": "2023-02",
+            "is_current": null,
+            "location": null,
+            "achievements": [
+              "solutions using Event-Driven Design. I built scalable microservices handling millions of",
+              "transactions daily and developed high-performance APIs and serverless functions to support",
+              "mentoring developers. Led key projects, including a new UI library, a Terraform-based",
+              "implemented features, fixed bugs, reviewed code, mentored developers, and supported"
+            ],
+            "tech_stack": [
+              "terraform",
+              "ci/cd",
+              "scala"
+            ],
+            "confidence": 1.0
+          },
+          {
+            "company": "Paytrack",
+            "role": "Tech Lead",
+            "employment_type": null,
+            "start_date": "2021-07",
+            "end_date": "2022-02",
+            "is_current": null,
+            "location": null,
+            "achievements": [
+              "mentoring developers. Led key projects, including a new UI library, a Terraform-based",
+              "infrastructure overhaul, and a billing calculation app. Also improved code quality with DDD",
+              "implemented features, fixed bugs, reviewed code, mentored developers, and supported",
+              "Managed teams of up to 12, delivering"
+            ],
+            "tech_stack": [
+              "terraform",
+              "ci/cd",
+              "scala"
+            ],
+            "confidence": 1.0
+          },
+          {
+            "company": "Senior Sistemas",
+            "role": "Tech Lead",
+            "employment_type": null,
+            "start_date": "2020-07",
+            "end_date": "2021-06",
+            "is_current": null,
+            "location": null,
+            "achievements": [
+              "mentoring developers. Led key projects, including a new UI library, a Terraform-based",
+              "infrastructure overhaul, and a billing calculation app. Also improved code quality with DDD",
+              "implemented features, fixed bugs, reviewed code, mentored developers, and supported",
+              "Led eSocial compliance project, collaborating on user stories, implementing features, fixing",
+              "Implemented system features using Java, Delphi, Oracle, and SQL Server. Resolved complex"
+            ],
+            "tech_stack": [
+              "terraform",
+              "java",
+              "sql server",
+              "scala",
+              "ci/cd",
+              "oracle"
+            ],
+            "confidence": 1.0
+          }
+        ],
+        "education": [
+          {
+            "institution": "FURB",
+            "degree": "Bachelor's Degree in Information Systems",
+            "field": null,
+            "start_date": "2012-01",
+            "end_date": "2015-01",
+            "confidence": 0.7
+          }
+        ],
+        "certifications": [],
+        "expected_salary": null,
+        "availability": null,
+        "meta": {
+          "raw_len": 4281,
+          "projects": [
+            {
+              "name": "Projeto não especificado",
+              "description": "for a major U.S. company. My focus is on",
+              "technologies": [
+                "r"
+              ],
+              "url": null,
+              "confidence": 0.7
+            },
+            {
+              "name": "aurelio-rutzen-396154122/ Blumenau, Santa Catarina",
+              "description": "aurelio-rutzen-396154122/ Blumenau, Santa Catarina - Brazil\nSUMMARY\nExperienced Software Engineer with over 11 years of expertise in designing scalable software \narchitectures, leading high-impact projects, and mentoring development teams",
+              "technologies": [
+                "scala",
+                "r"
+              ],
+              "url": null,
+              "confidence": 0.7
+            },
+            {
+              "name": "SQL Server",
+              "description": "07/2020\nSenior Sistemas\nLocation\nImplemented system features using Java, Delphi, Oracle, and SQL Server",
+              "technologies": [
+                "java",
+                "r",
+                "oracle",
+                "sql server"
+              ],
+              "url": null,
+              "confidence": 0.7
+            },
+            {
+              "name": "FURB Blumenau, Brazil",
+              "description": "2015\nFURB\nBlumenau, Brazil\nKEY ACHIEVEMENTS\nExperienced Tech Lead with \nProven Project Delivery\nManaged teams of up to 12, delivering \nprojects on time with high quality",
+              "technologies": [
+                "r"
+              ],
+              "url": null,
+              "confidence": 0.7
+            }
+          ],
+          "achievements": [],
+          "parser_version": "enhanced"
+        }
+      },
+      "confidence_overall": 0.98,
+      "processing_ms": 43
+    }
+  ],
+  "scanned_dir": "C:\\Users\\joao.miguel\\Documents\\Curriculum"
+}
