@@ -1,8 +1,11 @@
-# main.py  (v0.9.5)
+# main.py  (v0.9.5) - COM SUPORTE A URLs
 import os
 import re
 import time
 import hashlib
+import tempfile
+import requests
+from urllib.parse import urlparse
 from typing import List, Optional, Dict, Any, Tuple
 
 from fastapi import FastAPI, Body, HTTPException
@@ -20,6 +23,57 @@ except Exception:
 # ===== config =====
 load_dotenv()
 SOURCE_DIR = os.getenv("SOURCE_DIR", r"C:\Users\joao.miguel\Documents\Curriculum")
+
+# ===== funções de download =====
+def download_pdf_from_url(url: str) -> str:
+    """Baixa um PDF de uma URL e retorna o caminho do arquivo temporário"""
+    try:
+        # Extrai ID do Google Drive se for uma URL de visualização
+        if "drive.google.com/file/d/" in url and "view" in url:
+            file_id = url.split('/d/')[1].split('/')[0]
+            url = f"https://drive.google.com/uc?export=download&id={file_id}"
+            print(f"DEBUG: Converted Google Drive URL to direct download: {url}")
+
+        # Valida se é uma URL válida
+        parsed_url = urlparse(url)
+        if not parsed_url.scheme or not parsed_url.netloc:
+            raise ValueError("URL inválida")
+        
+        # URLs do Google Drive são aceitas automaticamente
+        if not url.lower().endswith('.pdf') and 'drive.google.com' not in url.lower():
+            # Faz uma requisição HEAD para verificar o content-type
+            head_response = requests.head(url, timeout=10, allow_redirects=True)
+            content_type = head_response.headers.get('content-type', '').lower()
+            if 'pdf' not in content_type:
+                raise ValueError("URL não aponta para um arquivo PDF")
+        
+        # Baixa o arquivo
+        response = requests.get(url, timeout=30, allow_redirects=True)
+        response.raise_for_status()
+        
+        # Verifica se o conteúdo é realmente um PDF
+        if not response.content.startswith(b'%PDF'):
+            raise ValueError("Arquivo baixado não é um PDF válido")
+        
+        # Cria arquivo temporário
+        temp_file = tempfile.NamedTemporaryFile(delete=False, suffix='.pdf')
+        temp_file.write(response.content)
+        temp_file.close()
+        
+        return temp_file.name
+        
+    except requests.exceptions.RequestException as e:
+        raise HTTPException(status_code=400, detail=f"Erro ao baixar PDF: {str(e)}")
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Erro ao processar URL: {str(e)}")
+
+def cleanup_temp_file(file_path: str):
+    """Remove arquivo temporário"""
+    try:
+        if os.path.exists(file_path):
+            os.unlink(file_path)
+    except Exception:
+        pass  # Ignora erros de limpeza
 
 # ===== modelos =====
 class CandidateLocation(BaseModel):
@@ -91,6 +145,16 @@ class ParseItem(BaseModel):
 class ParseAllResponse(BaseModel):
     results: List[ParseItem]
     scanned_dir: str
+
+# ===== modelos para URLs =====
+class ParseAllBody(BaseModel):
+    urls: List[str] = Field(..., description="Lista de URLs de PDFs para processar")
+
+class ParseSingleBody(BaseModel):
+    file_path: str = Field(..., description="Caminho do arquivo PDF local para processar")
+
+class ParseSingleUrlBody(BaseModel):
+    url: str = Field(..., description="URL do PDF para processar")
 
 # ===== regex & constantes =====
 EMAIL_RE = re.compile(r"[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}")
@@ -1185,6 +1249,221 @@ def parse_all_enhanced(_: ParseAllBody = Body(default=None)):
         json.dump(ParseAllResponse(results=results, scanned_dir=SOURCE_DIR).model_dump(), f, ensure_ascii=False, indent=2)
 
     return ParseAllResponse(results=results, scanned_dir=SOURCE_DIR)
+
+# ===== ENDPOINTS PARA URLs =====
+@app.post("/cv:parse-single-url", response_model=ParseItem)
+def parse_single_url(body: ParseSingleUrlBody):
+    """Parse um único PDF a partir de URL"""
+    temp_file = None
+    started = time.time()
+    
+    try:
+        # Baixa o PDF da URL
+        temp_file = download_pdf_from_url(body.url)
+        
+        # Processa o PDF
+        raw_text = read_pdf_text(temp_file)
+        data = extract_all(raw_text)
+        
+        # Calcula confiança
+        conf = 0.5
+        if data.candidate.full_name: conf += 0.15
+        if data.candidate.emails: conf += 0.1
+        if data.skills: conf += 0.05
+        if data.experiences: conf += 0.1
+        if data.education: conf += 0.05
+        if data.certifications: conf += 0.02
+        conf = min(conf, 0.95)
+        
+        # Extrai nome do arquivo da URL
+        filename = os.path.basename(urlparse(body.url).path) or "pdf.pdf"
+        if not filename.lower().endswith('.pdf'):
+            filename += '.pdf'
+        
+        return ParseItem(
+            file=filename,
+            hash=text_sha256(raw_text),
+            data=data,
+            confidence_overall=conf,
+            processing_ms=int((time.time()-started)*1000)
+        )
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Erro ao processar PDF: {str(e)}")
+    finally:
+        # Limpa arquivo temporário
+        if temp_file:
+            cleanup_temp_file(temp_file)
+
+@app.post("/cv:parse-single-url-enhanced", response_model=ParseItem)
+def parse_single_url_enhanced(body: ParseSingleUrlBody):
+    """Parse um único PDF a partir de URL com parser melhorado"""
+    try:
+        from enhanced_parser import EnhancedParser
+        enhanced_parser = EnhancedParser()
+    except ImportError:
+        raise HTTPException(status_code=500, detail="Parser melhorado não disponível")
+    
+    temp_file = None
+    started = time.time()
+    
+    try:
+        # Baixa o PDF da URL
+        temp_file = download_pdf_from_url(body.url)
+        
+        # Processa o PDF
+        raw_text = read_pdf_text(temp_file)
+        data = enhanced_parser.parse_enhanced(raw_text)
+        
+        # Calcula confiança melhorada
+        conf = 0.6
+        if data.candidate.full_name: conf += 0.15
+        if data.candidate.emails: conf += 0.1
+        if data.summary: conf += 0.05
+        if data.skills: conf += 0.1
+        if data.experiences: conf += 0.1
+        if data.education: conf += 0.05
+        if data.certifications: conf += 0.03
+        if data.meta.get("projects"): conf += 0.02
+        if data.meta.get("achievements"): conf += 0.02
+        conf = min(conf, 0.98)
+        
+        # Extrai nome do arquivo da URL
+        filename = os.path.basename(urlparse(body.url).path) or "pdf.pdf"
+        if not filename.lower().endswith('.pdf'):
+            filename += '.pdf'
+        
+        return ParseItem(
+            file=filename,
+            hash=text_sha256(raw_text),
+            data=data,
+            confidence_overall=conf,
+            processing_ms=int((time.time()-started)*1000)
+        )
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Erro ao processar PDF: {str(e)}")
+    finally:
+        # Limpa arquivo temporário
+        if temp_file:
+            cleanup_temp_file(temp_file)
+
+@app.post("/cv:parse-all-urls", response_model=ParseAllResponse)
+def parse_all_urls(body: ParseAllBody):
+    """Processa múltiplos PDFs a partir de URLs"""
+    results: List[ParseItem] = []
+    
+    for url in body.urls:
+        started = time.time()
+        temp_file = None
+        try:
+            # Baixa o PDF da URL
+            temp_file = download_pdf_from_url(url)
+            
+            # Processa o PDF
+            raw_text = read_pdf_text(temp_file)
+            data = extract_all(raw_text)
+            
+            # Calcula confiança
+            conf = 0.5
+            if data.candidate.full_name: conf += 0.15
+            if data.candidate.emails: conf += 0.1
+            if data.skills: conf += 0.05
+            if data.experiences: conf += 0.1
+            if data.education: conf += 0.05
+            if data.certifications: conf += 0.02
+            conf = min(conf, 0.95)
+
+            # Extrai nome do arquivo da URL
+            filename = os.path.basename(urlparse(url).path) or f"pdf_{len(results)}.pdf"
+            if not filename.lower().endswith('.pdf'):
+                filename += '.pdf'
+
+            results.append(ParseItem(
+                file=filename,
+                hash=text_sha256(raw_text),
+                data=data,
+                confidence_overall=conf,
+                processing_ms=int((time.time()-started)*1000)
+            ))
+            
+        except Exception as e:
+            filename = os.path.basename(urlparse(url).path) or f"pdf_{len(results)}.pdf"
+            results.append(ParseItem(
+                file=filename,
+                hash="",
+                data=ParsedCV(),
+                confidence_overall=0.0,
+                processing_ms=int((time.time()-started)*1000)
+            ))
+        finally:
+            # Limpa arquivo temporário
+            if temp_file:
+                cleanup_temp_file(temp_file)
+
+    return ParseAllResponse(results=results, scanned_dir="URLs")
+
+@app.post("/cv:parse-all-urls-enhanced", response_model=ParseAllResponse)
+def parse_all_urls_enhanced(body: ParseAllBody):
+    """Processa múltiplos PDFs a partir de URLs com parser melhorado"""
+    try:
+        from enhanced_parser import EnhancedParser
+        enhanced_parser = EnhancedParser()
+    except ImportError:
+        raise HTTPException(status_code=500, detail="Parser melhorado não disponível")
+    
+    results: List[ParseItem] = []
+    
+    for url in body.urls:
+        started = time.time()
+        temp_file = None
+        try:
+            # Baixa o PDF da URL
+            temp_file = download_pdf_from_url(url)
+            
+            # Processa o PDF
+            raw_text = read_pdf_text(temp_file)
+            data = enhanced_parser.parse_enhanced(raw_text)
+            
+            # Calcula confiança melhorada
+            conf = 0.6
+            if data.candidate.full_name: conf += 0.15
+            if data.candidate.emails: conf += 0.1
+            if data.summary: conf += 0.05
+            if data.skills: conf += 0.1
+            if data.experiences: conf += 0.1
+            if data.education: conf += 0.05
+            if data.certifications: conf += 0.03
+            if data.meta.get("projects"): conf += 0.02
+            if data.meta.get("achievements"): conf += 0.02
+            conf = min(conf, 0.98)
+
+            # Extrai nome do arquivo da URL
+            filename = os.path.basename(urlparse(url).path) or f"pdf_{len(results)}.pdf"
+            if not filename.lower().endswith('.pdf'):
+                filename += '.pdf'
+
+            results.append(ParseItem(
+                file=filename,
+                hash=text_sha256(raw_text),
+                data=data,
+                confidence_overall=conf,
+                processing_ms=int((time.time()-started)*1000)
+            ))
+            
+        except Exception as e:
+            filename = os.path.basename(urlparse(url).path) or f"pdf_{len(results)}.pdf"
+            results.append(ParseItem(
+                file=filename,
+                hash="",
+                data=ParsedCV(),
+                confidence_overall=0.0,
+                processing_ms=int((time.time()-started)*1000)
+            ))
+        finally:
+            # Limpa arquivo temporário
+            if temp_file:
+                cleanup_temp_file(temp_file)
+
+    return ParseAllResponse(results=results, scanned_dir="URLs")
 
 @app.post("/cv:parse-single", response_model=ParseItem)
 def parse_single(body: ParseSingleBody):

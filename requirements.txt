@@ -1,8 +1,8 @@
-fastapi==0.115.0
-uvicorn[standard]==0.30.6
-python-dotenv==1.0.1
-pydantic==2.8.2
-pymupdf==1.24.10
-spacy==3.7.5
-spacy-legacy==3.0.12
-spacy-transformers==1.2.0
+fastapi==0.117.1
+uvicorn[standard]==0.37.0
+python-dotenv==1.1.1
+pydantic==2.11.9
+pymupdf==1.26.4
+spacy==3.8.7
+requests==2.32.4
+aiohttp==3.12.15
