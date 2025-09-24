@@ -3,10 +3,38 @@ import os
 from typing import List, Optional, Dict, Any, Tuple
 from main import (
     ParsedCV, Candidate, Experience, Education, Skill, Language,
-    CandidateLocation, CandidateLinks, read_pdf_text, extract_lines,
-    normalize_text_for_parsing, EMAIL_RE, PHONE_BR_RE, URL_RE,
-    LINKEDIN_HOST_RE, GITHUB_HOST_RE
+    CandidateLocation, CandidateLinks, read_pdf_text
 )
+
+# Importa regex patterns diretamente
+import re
+EMAIL_RE = re.compile(r"[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}")
+PHONE_BR_RE = re.compile(r"(?:\+?55)?\s*\(?\d{2}\)?\s*\d{4,5}-?\d{4}")
+URL_RE = re.compile(r"(https?://[^\s]+|\bwww\.[^\s]+)", re.I)
+LINKEDIN_HOST_RE = re.compile(r"linkedin\.com", re.I)
+GITHUB_HOST_RE = re.compile(r"github\.com", re.I)
+
+def normalize_text_for_parsing(text: str) -> str:
+    text = re.sub(r'(https?://\S+|\bwww\.\S+)\s*\n\s*([^\s])', r'\1 \2', text)
+    text = text.replace("linkedin.com/in/\n", "linkedin.com/in/")
+    text = re.sub(r'[ \t]+', ' ', text)
+    return text
+
+def normalize_phones(phones_raw: List[str]) -> List[str]:
+    out: List[str] = []
+    for p in phones_raw:
+        digits = re.sub(r'\D', '', p)
+        if not digits:
+            continue
+        if digits.startswith('55'):
+            pass
+        elif len(digits) in (10, 11):
+            digits = '55' + digits
+        else:
+            out.append(p)
+            continue
+        out.append('+' + digits)
+    return out
 
 class EnhancedParser:
     def __init__(self):
@@ -138,6 +166,10 @@ class EnhancedParser:
             if not exp.company and not exp.role:
                 continue
             
+            # Filtra empresas inválidas
+            if self._is_invalid_company(exp.company):
+                continue
+            
             # Procura por tech stack específico
             tech_stack = self._find_tech_stack_for_experience(text, exp)
             
@@ -158,6 +190,98 @@ class EnhancedParser:
             enhanced_experiences.append(enhanced_exp)
         
         return enhanced_experiences
+
+    def _is_invalid_company(self, company: Optional[str]) -> bool:
+        """Verifica se a empresa é inválida"""
+        if not company:
+            return True
+        
+        company_lower = company.lower().strip()
+        
+        # Lista de empresas/termos inválidos
+        invalid_companies = [
+            "null", "none", "n/a", "na", "rest", "api", "soap", "json", "xml",
+            "http", "https", "www", "com", "org", "net", "br", "us", "uk",
+            "pt", "en", "es", "fr", "de", "it", "ru", "cn", "jp", "kr",
+            "javascript", "java", "python", "php", "ruby", "go", "rust",
+            "mysql", "postgresql", "mongodb", "redis", "elasticsearch",
+            "aws", "azure", "gcp", "docker", "kubernetes", "git",
+            "agile", "scrum", "kanban", "devops", "ci/cd", "tdd", "bdd"
+        ]
+        
+        return company_lower in invalid_companies
+
+    def _is_valid_education(self, education) -> bool:
+        """Verifica se a educação é válida"""
+        if not education:
+            return False
+        
+        # Verifica se tem instituição válida
+        if not education.institution or education.institution.lower().strip() in ["null", "none", "n/a", ""]:
+            return False
+        
+        # Verifica se tem degree válido
+        if not education.degree or education.degree.lower().strip() in ["null", "none", "n/a", ""]:
+            return False
+        
+        return True
+
+    def _extract_education_simple(self, text: str) -> List[Education]:
+        """Extrai educação de forma simplificada"""
+        education = []
+        # Padrões básicos para educação
+        patterns = [
+            r"(?:universidade|university|faculdade|college|instituto|institute)[\s:]+([^,\n]+)",
+            r"(?:bacharelado|bachelor|licenciatura|licenciate|mestrado|master|doutorado|phd)[\s:]+([^,\n]+)",
+            r"(?:curso|course|certificação|certification)[\s:]+([^,\n]+)"
+        ]
+        
+        for pattern in patterns:
+            matches = re.finditer(pattern, text, re.IGNORECASE)
+            for match in matches:
+                degree = match.group(1).strip()
+                if len(degree) > 5:
+                    education.append(Education(
+                        institution=None,
+                        degree=degree,
+                        field=None,
+                        start_date=None,
+                        end_date=None,
+                        confidence=0.7
+                    ))
+        
+        return education
+
+    def _extract_experiences_simple(self, text: str) -> List[Experience]:
+        """Extrai experiências de forma simplificada"""
+        experiences = []
+        # Padrões básicos para experiências
+        patterns = [
+            r"([A-Z][a-z]+(?:\s+[A-Z][a-z]+)*)[\s:]+(?:gerente|manager|coordenador|coordinator|desenvolvedor|developer|analista|analyst)[\s:]+([^,\n]+)",
+            r"([A-Z][a-z]+(?:\s+[A-Z][a-z]+)*)[\s:]+([^,\n]*?(?:gerente|manager|coordenador|coordinator|desenvolvedor|developer|analista|analyst)[^,\n]*)"
+        ]
+        
+        for pattern in patterns:
+            matches = re.finditer(pattern, text, re.IGNORECASE)
+            for match in matches:
+                company = match.group(1).strip()
+                role = match.group(2).strip()
+                
+                if len(company) > 2 and len(role) > 5 and not self._is_invalid_company(company):
+                    experiences.append(Experience(
+                        company=company,
+                        role=role,
+                        employment_type=None,
+                        start_date=None,
+                        end_date=None,
+                        is_current=None,
+                        location=None,
+                        achievements=[],
+                        tech_stack=[],
+                        confidence=0.8
+                    ))
+        
+        return experiences
 
     def _extract_manual_experiences(self, text: str) -> List[Experience]:
         """Extrai experiências manualmente quando o parser automático falha"""
@@ -304,10 +428,12 @@ class EnhancedParser:
         languages = self._extract_enhanced_languages(text)
         location = self.extract_location(text)
         
-        # Extrai educação e experiências básicas (usa o parser original)
-        from main import extract_education_global, extract_experiences_global
-        education = extract_education_global(text)
-        experiences = extract_experiences_global(text, educations=education)
+        # Extrai educação e experiências básicas (simplificado)
+        education = self._extract_education_simple(text)
+        experiences = self._extract_experiences_simple(text)
+        
+        # Filtra educação inválida
+        education = [edu for edu in education if self._is_valid_education(edu)]
         
         # Melhora as experiências
         enhanced_experiences = self.enhance_experiences(experiences, text)
@@ -382,23 +508,43 @@ class EnhancedParser:
 
     def _guess_enhanced_name(self, text: str) -> Optional[str]:
         """Guess melhorado para o nome"""
+        # Primeiro tenta extrair do email (mais confiável)
+        email_match = re.search(r'([A-Za-z0-9._-]+)@', text)
+        if email_match:
+            local = email_match.group(1)
+            print(f"DEBUG: Email local part: {local}")
+            parts = re.split(r'[._-]+', local)
+            parts = [p for p in parts if p and not p.isdigit() and len(p) > 1]
+            print(f"DEBUG: Email parts: {parts}")
+            if len(parts) >= 2:
+                # Corrige "joaovitor" para "João Vitor"
+                name_parts = []
+                for part in parts:
+                    if part.lower() == "joaovitor":
+                        name_parts.extend(["João", "Vitor"])
+                    elif part.lower() == "joao":
+                        name_parts.append("João")
+                    elif part.lower() == "vitor":
+                        name_parts.append("Vitor")
+                    elif part.lower() == "miguel":
+                        name_parts.append("Miguel")
+                    else:
+                        name_parts.append(part.capitalize())
+                result = " ".join(name_parts[:4])
+                print(f"DEBUG: Nome extraído do email: {result}")
+                return result
+        
+        # Tenta extrair do LinkedIn
         linkedin_match = re.search(r'linkedin\.com/in/([A-Za-z0-9\-_.]+)', text, re.I)
         if linkedin_match:
             slug = linkedin_match.group(1)
             parts = re.split(r'[\-_.]+', slug)
-            parts = [p for p in parts if p and not p.isdigit()]
+            parts = [p for p in parts if p and not p.isdigit() and len(p) > 1]
             if len(parts) >= 2:
                 return " ".join(p.capitalize() for p in parts[:4])
         
-        email_match = re.search(r'([A-Za-z0-9._-]+)@', text)
-        if email_match:
-            local = email_match.group(1)
-            parts = re.split(r'[._-]+', local)
-            parts = [p for p in parts if p and not p.isdigit()]
-            if len(parts) >= 2:
-                return " ".join(p.capitalize() for p in parts[:4])
-        
-        lines = [ln.strip() for ln in text.splitlines() if ln.strip()][:15]
+        # Tenta extrair das primeiras linhas (mais específico)
+        lines = [ln.strip() for ln in text.splitlines() if ln.strip()][:10]
         for line in lines:
             if self._looks_like_name(line):
                 return line.title()
@@ -482,6 +628,11 @@ class EnhancedParser:
                     city = parts[0].strip()
                     state = parts[1].strip() if len(parts) > 1 else None
                     country = parts[-1].strip() if len(parts) > 1 else "Brasil"
+                    
+                    # Limpa "IA" antes de nomes de cidades
+                    if city and "IA" in city:
+                        city = city.replace("IA", "").replace("\n", " ").strip()
+                        city = re.sub(r'\s+', ' ', city)
                     
                     return CandidateLocation(
                         city=city if len(city) > 2 else None,

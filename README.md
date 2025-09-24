@@ -1,6 +1,6 @@
-# 🚀 CV Parser API - Sistema Completo
+# 🚀 CV Parser API - Sistema Simplificado
 
-Sistema avançado para processamento de currículos em PDF com suporte a URLs e arquivos locais.
+Sistema avançado para processamento de currículos em PDF **APENAS via URLs**.
 
 ## ✨ Funcionalidades
 
@@ -11,25 +11,22 @@ Sistema avançado para processamento de currículos em PDF com suporte a URLs e 
 - ✅ **Skills**: Níveis de proficiência (expert, advanced, etc.)
 - ✅ **Projetos**: Detalhamento completo de projetos
 - ✅ **Achievements**: Conquistas e realizações
-- ✅ **Localização**: Cidade, estado, país
+- ✅ **Localização**: Cidade, estado, país (limpeza automática)
 - ✅ **Summary**: Resumo profissional automático
+- ✅ **Filtros**: Remove empresas/instituições inválidas
 
 ### 🌐 **Suporte a URLs**
 - ✅ **Google Drive**: Conversão automática de URLs
 - ✅ **URLs Diretas**: Qualquer PDF via URL
 - ✅ **Validação**: Verificação de content-type
 - ✅ **Download**: Processamento temporário
-
-### 📁 **Suporte a Arquivos Locais**
-- ✅ **Pasta Local**: Processamento em lote
-- ✅ **Arquivo Único**: Processamento individual
-- ✅ **Validação**: Verificação de existência
+- ✅ **Limpeza**: Remove arquivos temporários automaticamente
 
 ## 🏗️ Arquitetura
 
 ```
 📦 Sistema
-├── 📄 main.py              # API principal + parser básico + endpoints
+├── 📄 main.py              # API principal + endpoint único
 ├── 🧠 enhanced_parser.py   # Parser avançado com IA/ML
 ├── 📋 requirements.txt     # Dependências
 └── 📖 README.md           # Documentação
@@ -39,8 +36,7 @@ Sistema avançado para processamento de currículos em PDF com suporte a URLs e 
 
 **main.py:**
 - FastAPI application
-- Parser básico (regex-based)
-- Endpoints para URLs e arquivos
+- Endpoint único para URLs
 - Download e validação de PDFs
 - Integração com enhanced_parser
 
@@ -50,6 +46,7 @@ Sistema avançado para processamento de currículos em PDF com suporte a URLs e 
 - Análise de skills e níveis
 - Detecção de projetos e achievements
 - Processamento de localização
+- Filtros de qualidade
 
 ## 🚀 Instalação
 
@@ -70,29 +67,12 @@ uvicorn main:app --reload --host 0.0.0.0 --port 8000
 
 ## 📊 Endpoints
 
-### 🌐 **URLs (Recomendado)**
+### 🌐 **URLs (Único Endpoint)**
 
 | Método | Endpoint | Descrição | Parser |
 |--------|----------|-----------|---------|
-| POST | `/cv:parse-single-url` | Parse único PDF de URL | Básico |
 | POST | `/cv:parse-single-url-enhanced` | Parse único PDF de URL | **Avançado** |
-| POST | `/cv:parse-all-urls` | Parse múltiplos PDFs de URLs | Básico |
-| POST | `/cv:parse-all-urls-enhanced` | Parse múltiplos PDFs de URLs | **Avançado** |
-
-### 📁 **Arquivos Locais**
-
-| Método | Endpoint | Descrição | Parser |
-|--------|----------|-----------|---------|
-| POST | `/cv:parse-single` | Parse único arquivo local | Básico |
-| POST | `/cv:parse-single-enhanced` | Parse único arquivo local | **Avançado** |
-| POST | `/cv:parse-all` | Parse pasta local | Básico |
-| POST | `/cv:parse-enhanced` | Parse pasta local | **Avançado** |
-
-### 🔍 **Utilitários**
-
-| Método | Endpoint | Descrição |
-|--------|----------|-----------|
-| GET | `/health` | Health check |
+| GET | `/health` | Health check | - |
 
 ## 🔗 URLs Suportadas
 
@@ -103,39 +83,23 @@ uvicorn main:app --reload --host 0.0.0.0 --port 8000
 
 ## 📝 Exemplos de Uso
 
-### 🌐 **Parse Avançado de URL (RECOMENDADO)**
+### 🌐 **Parse Avançado de URL (ÚNICO ENDPOINT)**
 ```bash
 curl -X POST "http://localhost:8000/cv:parse-single-url-enhanced" \
   -H "Content-Type: application/json" \
   -d '{"url": "https://drive.google.com/file/d/1aw4CS3xgPws-zzNHBrw1-35eHRA6WIaD/view"}'
 ```
 
-### 🌐 **Parse Básico de URL**
+### 🌐 **Parse com URL Direta**
 ```bash
-curl -X POST "http://localhost:8000/cv:parse-single-url" \
+curl -X POST "http://localhost:8000/cv:parse-single-url-enhanced" \
   -H "Content-Type: application/json" \
   -d '{"url": "https://exemplo.com/curriculo.pdf"}'
 ```
 
-### 🌐 **Parse Múltiplas URLs**
+### 🔍 **Health Check**
 ```bash
-curl -X POST "http://localhost:8000/cv:parse-all-urls-enhanced" \
-  -H "Content-Type: application/json" \
-  -d '{"urls": ["URL1", "URL2", "URL3"]}'
-```
-
-### 📁 **Parse Arquivo Local**
-```bash
-curl -X POST "http://localhost:8000/cv:parse-single-enhanced" \
-  -H "Content-Type: application/json" \
-  -d '{"file_path": "/caminho/para/curriculo.pdf"}'
-```
-
-### 📁 **Parse Pasta Local**
-```bash
-curl -X POST "http://localhost:8000/cv:parse-enhanced" \
-  -H "Content-Type: application/json" \
-  -d '{}'
+curl http://localhost:8000/health
 ```
 
 ## 📊 Exemplo de Resposta (Parser Avançado)
@@ -146,12 +110,12 @@ curl -X POST "http://localhost:8000/cv:parse-enhanced" \
   "hash": "abc123...",
   "data": {
     "candidate": {
-      "full_name": "João Silva",
+      "full_name": "João Vitor Miguel",
       "emails": ["joao@email.com"],
       "phones": ["+5511999999999"],
       "location": {
-        "city": "São Paulo",
-        "state": "SP",
+        "city": "Blumenau",
+        "state": "Santa Catarina",
         "country": "Brasil"
       },
       "links": {
@@ -235,22 +199,13 @@ aiohttp==3.12.15          # HTTP assíncrono
 
 ## ⚡ Performance
 
-### **Parser Básico:**
-- ⚡ **Velocidade**: ~500ms por PDF
-- 🎯 **Precisão**: 70-80%
-- 💾 **Memória**: Baixa
-
 ### **Parser Avançado:**
 - ⚡ **Velocidade**: ~2-3s por PDF
 - 🎯 **Precisão**: 90-95%
 - 💾 **Memória**: Média (spaCy)
+- 🧹 **Limpeza**: Filtros automáticos de qualidade
 
 ## 🔧 Configuração
-
-### **Variáveis de Ambiente (.env)**
-```env
-SOURCE_DIR=/caminho/para/pasta/pdf
-```
 
 ### **spaCy (Opcional)**
 ```bash
@@ -273,18 +228,13 @@ python3 -m spacy download pt_core_news_lg
 - Verifique se a URL é válida
 - Para Google Drive, use: `https://drive.google.com/uc?export=download&id=FILE_ID`
 
-### **Erro: "Arquivo não encontrado"**
-- Verifique o caminho do arquivo
-- Use caminhos absolutos
+## 📈 Melhorias Implementadas
 
-## 📈 Roadmap
-
-- [ ] **Cache**: Implementar cache de resultados
-- [ ] **Batch**: Processamento assíncrono em lote
-- [ ] **Webhooks**: Notificações de conclusão
-- [ ] **Dashboard**: Interface web para monitoramento
-- [ ] **Export**: Exportação para Excel/CSV
-- [ ] **API Keys**: Autenticação por chave
+- ✅ **Filtros de Qualidade**: Remove empresas/instituições inválidas
+- ✅ **Limpeza de Dados**: Remove "IA" de nomes de cidades
+- ✅ **Extração de Nome**: Prioriza email para maior precisão
+- ✅ **Validação**: Filtra experiências e educação com dados null
+- ✅ **Simplificação**: Apenas 1 endpoint para máxima simplicidade
 
 ## 🤝 Contribuição
 
@@ -300,6 +250,6 @@ Este projeto está sob a licença MIT. Veja o arquivo `LICENSE` para mais detalh
 
 ---
 
-**Versão**: 1.0.0  
-**Autor**: Sistema CV Parser  
+**Versão**: 2.0.0  
+**Autor**: Sistema CV Parser Simplificado  
 **Última Atualização**: 2024-09-23
